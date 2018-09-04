@@ -1,7 +1,11 @@
 <template>
   <div>
     <h1>{{ titulo }}</h1>
-  <img :src="foto.url" :alt="foto.titulo">
+    <ul>
+      <li v-for="foto of fotos">
+        <img :src="foto.url" :alt="foto.titulo">
+      </li>
+    </ul>
 </div>
 </template>
 
@@ -11,11 +15,13 @@ export default {
   data() {
     return{
       titulo: 'Alurapic',
-      foto: {
-        url: 'https://i.ytimg.com/vi/8qA4UOLnC5A/maxresdefault.jpg',
-        titulo: 'cachorro'
-      }
+      fotos: []
     }
+  },
+  created(){
+    let promise = this.$http.get('http://localhost:3000/v1/fotos');
+    promise.then(res => res.json())
+    .then(fotos => this.fotos = fotos, err => alert('Ocorreu um erro!'));
   }
 }
 </script>
